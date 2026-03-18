@@ -1,0 +1,76 @@
+{% doc %}
+  Renders a reusable button/link component.
+
+  @param {string} [label] - Text shown inside the button
+  @param {string} [url] - Optional destination URL
+  @param {string} [style] - Visual style: light, dark, or outline
+  @param {string} [class] - Optional extra classes
+
+  @example
+  {% render 'button', label: 'Shop Collection', url: routes.all_products_collection_url, style: 'light' %}
+{% enddoc %}
+
+{% liquid
+  assign button_label = label | default: 'Shop now'
+  assign button_url = url | default: '#'
+  assign button_style = style | default: 'dark'
+  assign button_class = class | default: ''
+%}
+
+<a class="theme-button theme-button--{{ button_style }} {{ button_class | strip }}" href="{{ button_url }}">
+  <span>{{ button_label }}</span>
+</a>
+
+{% stylesheet %}
+  .theme-button {
+    --button-bg: #1f1f1f;
+    --button-fg: #ffffff;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    min-height: 2.875rem;
+    padding: 0.7rem 1.6rem;
+    border: 1px solid var(--button-bg);
+    background: var(--button-bg);
+    color: var(--button-fg);
+    font-size: 0.98rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease;
+  }
+
+  .theme-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--button-bg) 25%, transparent);
+  }
+
+  .theme-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .theme-button--light {
+    --button-bg: #ffffff;
+    --button-fg: #1f1f1f;
+  }
+
+  .theme-button--dark {
+    --button-bg: #1f1f1f;
+    --button-fg: #ffffff;
+  }
+
+  .theme-button--outline {
+    --button-bg: transparent;
+    --button-fg: #ffffff;
+    border-color: currentcolor;
+    background: transparent;
+    color: var(--button-fg);
+  }
+
+  .theme-button--outline:hover {
+    background: #ffffff;
+    color: #1f1f1f;
+  }
+{% endstylesheet %}
