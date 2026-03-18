@@ -79,6 +79,11 @@ body {
   color: var(--color-foreground);
 }
 
+/* Utility font family (custom uploaded font) */
+.font-the-seasons {
+  font-family: the-seasons, sans-serif;
+}
+
 /** Section layout utilities */
 
 /**

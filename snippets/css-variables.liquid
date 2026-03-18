@@ -1,4 +1,12 @@
 {% style %}
+  @font-face {
+    font-family: the-seasons;
+    src: url("{{ 'Fontspring-DEMO-theseasons-reg.otf' | asset_url }}") format("opentype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+
   {% # Loads all font variantions with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}

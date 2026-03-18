@@ -1,4 +1,11 @@
 {
+  "header": {
+    "toggle_menu": "Toggle menu",
+    "close_menu": "Close menu",
+    "search": "Search",
+    "cart": "Cart",
+    "primary_navigation": "Primary navigation"
+  },
   "404": {
     "title": "404",
     "not_found": "Page not found.",

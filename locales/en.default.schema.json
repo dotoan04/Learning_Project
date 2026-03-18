@@ -4,6 +4,8 @@
     "article": "Article",
     "block": "Block",
     "blog": "Blog",
+    "brand": "Brand",
+    "brand_carousel": "Brand carousel",
     "cart": "Cart",
     "collection": "Collection",
     "collections": "Collections",
@@ -36,19 +38,26 @@
   "labels": {
     "alignment": "Alignment",
     "background": "Background",
+    "enable_auto_scroll": "Enable auto scroll",
     "foreground": "Foreground",
+    "gap": "Gap between logos",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
+    "link": "Link",
+    "logo": "Logo",
+    "logo_width": "Logo width",
     "menu": "Menu",
     "customer_account_menu": "Customer account menu",
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
+    "scroll_speed": "Scroll speed",
     "show_payment_icons": "Show payment icons",
     "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "title": "Title"
   },
   "options": {
     "alignment": {
@@ -72,6 +81,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

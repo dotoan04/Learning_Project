@@ -1,156 +1,308 @@
-<header class="site-header">
-  {% if section.settings.announcement_text != blank %}
-    <p class="site-header__announcement">{{ section.settings.announcement_text }}</p>
-  {% endif %}
+<header class="site-header" id="site-header">
 
-  <div class="site-header__main">
-    <nav class="site-header__menu" aria-label="Primary">
-      {% for link in section.settings.menu.links %}
-        <a class="site-header__menu-link{% if link.current %} is-active{% endif %}" href="{{ link.url }}">
-          {{ link.title }}
-          {% if section.settings.show_menu_plus %}
-            <span aria-hidden="true" class="site-header__menu-plus">+</span>
-          {% endif %}
-        </a>
-      {% endfor %}
-    </nav>
+  {%- if section.settings.announcement_text != blank -%}
+    <div class="site-header__announcement" id="site-announcement">
+      <div class="site-header__announcement-inner">
+        <p class="site-header__announcement-text">{{ section.settings.announcement_text }}</p>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="site-header__nav1">
+    <div class="site-header__nav1-start">
+      <button
+        class="site-header__hamburger"
+        aria-label="{{ 'header.toggle_menu' | t }}"
+        aria-expanded="false"
+        aria-controls="site-nav-drawer"
+      >
+        <span class="site-header__hamburger-bar"></span>
+        <span class="site-header__hamburger-bar"></span>
+        <span class="site-header__hamburger-bar"></span>
+      </button>
+
+      {%- if section.settings.show_search -%}
+        <form action="{{ routes.search_url }}" class="site-header__search" role="search">
+          <button type="submit" class="site-header__search-btn" aria-label="{{ 'header.search' | t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <line x1="16.7" y1="16.7" x2="21" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <input
+            type="search"
+            name="q"
+            class="site-header__search-input"
+            placeholder="{{ 'search.placeholder' | t }}"
+            aria-label="{{ 'header.search' | t }}"
+          >
+        </form>
+      {%- endif -%}
+    </div>
 
     <h2 class="site-header__brand-wrap">
       <a class="site-header__brand" href="{{ routes.root_url }}">
-        {% if section.settings.logo_image != blank %}
+        {%- if section.settings.logo_image != blank -%}
           {{ section.settings.logo_image | image_url: width: section.settings.logo_width | image_tag: widths: '160,220,320,440', class: 'site-header__logo-image', alt: shop.name }}
-        {% else %}
+        {%- else -%}
           {{ shop.name }}
-        {% endif %}
+        {%- endif -%}
       </a>
     </h2>
 
-    <div class="site-header__icons">
-      {% if section.settings.show_search %}
-        <a href="{{ routes.search_url }}" aria-label="Search">
-          <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
-            <line x1="16.7" y1="16.7" x2="21" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></line>
-          </svg>
-        </a>
-      {% endif %}
-
-      {% if section.settings.show_account and shop.customer_accounts_enabled %}
+    <div class="site-header__nav1-end">
+      {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
         <shopify-account menu="{{ section.settings.customer_account_menu }}">
           {{ 'icon-account.svg' | inline_asset_content }}
         </shopify-account>
-      {% endif %}
+      {%- endif -%}
 
-      <a class="site-header__cart" href="{{ routes.cart_url }}" aria-label="Cart">
-        {% if cart.item_count > 0 %}
-          <sup>{{ cart.item_count }}</sup>
-        {% endif %}
+      <a class="site-header__cart" href="{{ routes.cart_url }}" aria-label="{{ 'header.cart' | t }}">
+        {%- if cart.item_count > 0 -%}
+          <sup class="site-header__cart-count">{{ cart.item_count }}</sup>
+        {%- endif -%}
         {{ 'icon-cart.svg' | inline_asset_content }}
       </a>
     </div>
   </div>
+
+  <nav class="site-header__nav2" id="site-nav2" aria-label="{{ 'header.primary_navigation' | t }}">
+    {%- for link in section.settings.menu.links -%}
+      {%- if link.links.size > 0 -%}
+        <div class="site-header__nav2-item has-dropdown">
+          <button
+            class="site-header__nav2-link{%- if link.current %} is-active{%- endif -%}"
+            aria-expanded="false"
+            aria-haspopup="true"
+          >
+            {{- link.title -}}
+            <svg class="site-header__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul class="site-header__dropdown" role="list">
+            {%- for child_link in link.links -%}
+              <li>
+                <a
+                  class="site-header__dropdown-link{%- if child_link.current %} is-active{%- endif -%}"
+                  href="{{ child_link.url }}"
+                >
+                  {{- child_link.title -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- else -%}
+        <a
+          class="site-header__nav2-link{%- if link.current %} is-active{%- endif -%}"
+          href="{{ link.url }}"
+        >
+          {{- link.title -}}
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
+
 </header>
 
 {% stylesheet %}
+  /* ── Base ──────────────────────────────────────────────── */
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 30;
+    z-index: 100;
     background: transparent;
-    backdrop-filter: none;
-    border-bottom: 1px solid transparent;
-    transition: backdrop-filter 280ms ease, background 280ms ease, border-color 280ms ease;
+    transition:
+      background 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      backdrop-filter 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      -webkit-backdrop-filter 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 350ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .site-header.is-scrolled {
-    background: color-mix(in srgb, var(--color-background) 88%, transparent);
-    backdrop-filter: blur(5px);
-    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    background: color-mix(in srgb, var(--color-background) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
   }
 
+  /* ── Announcement bar ─────────────────────────────────── */
   .site-header__announcement {
-    text-align: center;
-    padding: 0.7rem 1rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border-bottom: 1px solid transparent;
-    color: color-mix(in srgb, var(--color-foreground) 88%, transparent);
-    transition: border-color 280ms ease;
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 350ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .site-header.is-scrolled .site-header__announcement {
-    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    grid-template-rows: 0fr;
   }
 
-  .site-header__main {
-    min-height: 5.6rem;
+  .site-header__announcement-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .site-header__announcement-text {
+    margin: 0;
+    padding: 0.65rem 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: color-mix(in srgb, var(--color-foreground) 85%, transparent);
+  }
+
+  /* ── Navbar 1 ─────────────────────────────────────────── */
+  .site-header__nav1 {
     display: grid;
-    align-items: center;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
     gap: 1rem;
-    padding-inline: clamp(1rem, 2.8vw, 3rem);
+    padding: 0.85rem clamp(1rem, 2.8vw, 3rem);
+    min-height: 4.5rem;
   }
 
-  .site-header__menu {
+  .site-header__nav1-start {
     display: flex;
     align-items: center;
-    gap: clamp(0.8rem, 1.6vw, 1.8rem);
+    gap: 0.5rem;
     min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
   }
 
-  .site-header__menu::-webkit-scrollbar {
-    display: none;
-  }
-
-  .site-header__menu-link {
-    display: inline-flex;
+  .site-header__nav1-end {
+    display: flex;
     align-items: center;
-    gap: 0.25rem;
-    white-space: nowrap;
-    text-decoration: none;
+    justify-content: flex-end;
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+
+  /* ── Hamburger (animated → X) ─────────────────────────── */
+  .site-header__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     color: var(--color-foreground);
-    font-size: 1.05rem;
-    line-height: 1;
+    pointer-events: none;
+    opacity: 0;
+    margin-right: 0;
     position: relative;
-    opacity: 0.92;
-    transition: opacity 180ms ease;
+    transition:
+      width 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      margin-right 350ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .site-header__menu-link:hover,
-  .site-header__menu-link.is-active {
+  .site-header.is-scrolled .site-header__hamburger {
+    pointer-events: auto;
     opacity: 1;
+    margin-right: 0.25rem;
   }
 
-  .site-header__menu-link::after {
-    content: '';
+  .site-header__hamburger-bar {
+    display: block;
+    width: 1.3rem;
+    height: 1.5px;
+    background: currentcolor;
+    border-radius: 2px;
     position: absolute;
     left: 0;
-    bottom: -0.45rem;
+    transition:
+      transform 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .site-header__hamburger-bar:nth-child(1) {
+    top: 0.45rem;
+  }
+
+  .site-header__hamburger-bar:nth-child(2) {
+    top: 50%;
+    margin-top: -0.75px;
+  }
+
+  .site-header__hamburger-bar:nth-child(3) {
+    bottom: 0.45rem;
+  }
+
+  .site-header__hamburger.is-active .site-header__hamburger-bar:nth-child(1) {
+    top: 50%;
+    margin-top: -0.75px;
+    transform: rotate(45deg);
+  }
+
+  .site-header__hamburger.is-active .site-header__hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header__hamburger.is-active .site-header__hamburger-bar:nth-child(3) {
+    bottom: 50%;
+    margin-bottom: -0.75px;
+    transform: rotate(-45deg);
+  }
+
+  /* ── Search form ──────────────────────────────────────── */
+  .site-header__search {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 22%, transparent);
+    padding-bottom: 0.2rem;
+    flex: 1;
+    min-width: 0;
+    max-width: 22rem;
+    transition: border-color 150ms ease;
+  }
+
+  .site-header__search:focus-within {
+    border-bottom-color: var(--color-foreground);
+  }
+
+  .site-header__search-btn {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: color-mix(in srgb, var(--color-foreground) 65%, transparent);
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 150ms ease;
+  }
+
+  .site-header__search:focus-within .site-header__search-btn {
+    color: var(--color-foreground);
+  }
+
+  .site-header__search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.88rem;
+    color: var(--color-foreground);
     width: 100%;
-    height: 1px;
-    background: currentcolor;
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 180ms ease;
+    padding: 0.1rem 0;
+    font-family: inherit;
   }
 
-  .site-header__menu-link:hover::after,
-  .site-header__menu-link.is-active::after {
-    transform: scaleX(1);
+  .site-header__search-input::placeholder {
+    color: color-mix(in srgb, var(--color-foreground) 45%, transparent);
   }
 
-  .site-header__menu-plus {
-    font-size: 1rem;
-    line-height: 1;
-  }
-
+  /* ── Brand / Logo ─────────────────────────────────────── */
   .site-header__brand-wrap {
     margin: 0;
     line-height: 1;
     text-align: center;
+    white-space: nowrap;
   }
 
   .site-header__brand {
@@ -159,94 +311,307 @@
     justify-content: center;
     color: var(--color-foreground);
     text-decoration: none;
-    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+    font-size: clamp(1.1rem, 1.6vw, 1.5rem);
     font-weight: 500;
   }
 
   .site-header__logo-image {
     width: auto;
-    max-height: 4rem;
+    max-height: 3.5rem;
+    display: block;
   }
 
-  .site-header__icons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: clamp(0.9rem, 1.6vw, 1.4rem);
-  }
-
-  .site-header__icons a,
-  .site-header__icons shopify-account {
+  /* ── Icon area ────────────────────────────────────────── */
+  .site-header__nav1-end a,
+  .site-header__nav1-end shopify-account {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--color-foreground);
+    text-decoration: none;
   }
 
-  .site-header__icons svg {
-    width: 1.85rem;
-    height: 1.85rem;
+  .site-header__nav1-end svg {
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .site-header__cart {
     position: relative;
   }
 
-  .site-header__cart sup {
+  .site-header__cart-count {
     position: absolute;
-    top: -0.2rem;
-    right: -0.45rem;
-    min-width: 1.05rem;
-    height: 1.05rem;
+    top: -0.25rem;
+    right: -0.5rem;
+    min-width: 1rem;
+    height: 1rem;
     border-radius: 999px;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: var(--color-foreground);
     color: var(--color-background);
+    padding: 0 0.2rem;
+    line-height: 1;
   }
 
-  @media (max-width: 990px) {
-    .site-header__main {
-      grid-template-columns: 1fr auto;
-      grid-template-areas:
-        'brand icons'
-        'menu menu';
-      row-gap: 0.85rem;
-      padding-block: 0.85rem;
+  /* ── Navbar 2 ─────────────────────────────────────────── */
+  .site-header__nav2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 2.5vw, 3rem);
+    padding: 0 clamp(1rem, 2.8vw, 3rem) 0.8rem;
+    transform: translateY(0);
+    opacity: 1;
+    transition:
+      transform 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 350ms cubic-bezier(0.4, 0, 0.2, 1),
+      background 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .site-header.is-scrolled .site-header__nav2 {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+  }
+
+  .site-header.is-scrolled .site-header__nav2.is-menu-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    background: color-mix(in srgb, var(--color-background) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  /* ── Nav 2 links ──────────────────────────────────────── */
+  .site-header__nav2-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 0.92rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+    opacity: 0.85;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-family: inherit;
+    transition:
+      opacity 200ms ease,
+      color 200ms ease,
+      transform 200ms ease;
+  }
+
+  .site-header__nav2-link:hover,
+  .site-header__nav2-link.is-active,
+  .site-header__nav2-item:hover > .site-header__nav2-link {
+    opacity: 1;
+    color: var(--color-button, #8B7355);
+    transform: translateY(-1px);
+  }
+
+  .site-header__nav2-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-button, #8B7355);
+    transform: translateX(-50%);
+    transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+  }
+
+  a.site-header__nav2-link:hover::after,
+  .site-header__nav2-link.is-active::after {
+    width: 100%;
+  }
+
+  button.site-header__nav2-link::after {
+    bottom: -2px;
+  }
+
+  /* ── Chevron ──────────────────────────────────────────── */
+  .site-header__chevron {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+
+  .site-header__nav2-link[aria-expanded="true"] .site-header__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ── Dropdown ─────────────────────────────────────────── */
+  .site-header__nav2-item {
+    position: relative;
+  }
+
+  .site-header__dropdown {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem 0;
+    min-width: 13rem;
+    background: var(--color-background);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+    z-index: 200;
+  }
+
+  .site-header__nav2-item:hover .site-header__dropdown,
+  .site-header__nav2-item.is-open .site-header__dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .site-header__dropdown-link {
+    display: block;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--color-foreground);
+    text-decoration: none;
+    opacity: 0.82;
+    transition:
+      opacity 130ms ease,
+      background 130ms ease;
+  }
+
+  .site-header__dropdown-link:hover,
+  .site-header__dropdown-link.is-active {
+    opacity: 1;
+    background: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .site-header__nav2 {
+      display: none;
     }
 
-    .site-header__brand-wrap {
-      grid-area: brand;
-      text-align: left;
+    .site-header__hamburger {
+      pointer-events: auto !important;
+      opacity: 1 !important;
+      margin-right: 0.25rem !important;
     }
 
-    .site-header__icons {
-      grid-area: icons;
+    .site-header__search {
+      max-width: none;
     }
 
-    .site-header__menu {
-      grid-area: menu;
-      justify-content: flex-start;
-      padding-bottom: 0.25rem;
+    .site-header__nav1 {
+      padding-inline: 1rem;
     }
   }
 {% endstylesheet %}
 
 {% javascript %}
-  const siteHeader = document.querySelector('.site-header');
+  (function () {
+    const header = document.getElementById('site-header');
+    const nav2 = document.getElementById('site-nav2');
+    const hamburger = header?.querySelector('.site-header__hamburger');
+    const nav2Items = header?.querySelectorAll('.site-header__nav2-item.has-dropdown');
+    var menuOpen = false;
 
-  function toggleHeaderScroll() {
-    if (window.scrollY > 8) {
-      siteHeader?.classList.add('is-scrolled');
-    } else {
-      siteHeader?.classList.remove('is-scrolled');
+    // ── Scroll behaviour (hysteresis) ─────────────────────
+    var SCROLL_DOWN_THRESHOLD = 80;
+    var SCROLL_UP_THRESHOLD = 24;
+
+    function onScroll() {
+      var y = window.scrollY;
+      if (header.classList.contains('is-scrolled')) {
+        if (y < SCROLL_UP_THRESHOLD) {
+          header.classList.remove('is-scrolled');
+          closeMenu();
+        }
+      } else {
+        if (y > SCROLL_DOWN_THRESHOLD) {
+          header.classList.add('is-scrolled');
+        }
+      }
     }
-  }
 
-  window.addEventListener('scroll', toggleHeaderScroll, { passive: true });
-  toggleHeaderScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Hamburger → X + toggle dropdown nav2 ──────────────
+    function openMenu() {
+      menuOpen = true;
+      nav2.classList.add('is-menu-open');
+      hamburger.classList.add('is-active');
+      hamburger.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+      menuOpen = false;
+      nav2.classList.remove('is-menu-open');
+      hamburger.classList.remove('is-active');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu() {
+      if (menuOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    hamburger?.addEventListener('click', toggleMenu);
+
+    // ── Nav2 dropdowns (keyboard / touch) ─────────────────
+    nav2Items?.forEach(function (item) {
+      var btn = item.querySelector('.site-header__nav2-link');
+
+      btn?.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = item.classList.contains('is-open');
+
+        nav2Items.forEach(function (i) {
+          i.classList.remove('is-open');
+          i.querySelector('.site-header__nav2-link')?.setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('click', function () {
+      nav2Items?.forEach(function (item) {
+        item.classList.remove('is-open');
+        item.querySelector('.site-header__nav2-link')?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
 {% endjavascript %}
 
 {% schema %}
@@ -257,18 +622,12 @@
       "type": "text",
       "id": "announcement_text",
       "label": "Announcement text",
-      "default": "AUSTRALIAN NATURAL BEAUTY & SKINCARE, ROOTED IN RITUAL"
+      "default": "Vietnamese Figure Collection & Customize 2026"
     },
     {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_menu_plus",
-      "label": "Show + on menu links",
-      "default": true
     },
     {
       "type": "image_picker",
@@ -288,7 +647,7 @@
     {
       "type": "checkbox",
       "id": "show_search",
-      "label": "Show search icon",
+      "label": "Show search box",
       "default": true
     },
     {
