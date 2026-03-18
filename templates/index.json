@@ -22,13 +22,23 @@
         "height_mobile": 520
       }
     },
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "introduce_shop_XQf38z": {
+      "type": "introduce-shop",
+      "name": "Introduce shop",
+      "settings": {
+        "heading": "Our Story",
+        "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        "button_label": "Learn More",
+        "button_link": "",
+        "button_style": "dark",
+        "image_1": "shopify://shop_images/product_figures_frieren_luminasta_xstellar_frieren_62964f76-2868-4e0e-aa81-b4f3f51413d1.webp",
+        "image_2": "shopify://shop_images/product_figures_frieren_luminasta_frieren_summer-dress.webp",
+        "image_3": "shopify://shop_images/product_figures_frieren_banpresto_maximatic_frieren-vol2.webp"
+      }
     }
   },
   "order": [
     "hero",
-    "main"
+    "introduce_shop_XQf38z"
   ]
 }
