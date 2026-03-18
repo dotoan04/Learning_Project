@@ -11,7 +11,16 @@
   "sections": {
     "hero": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/wallhaven-6l5wpl.png",
+        "heading": "Sousou No Frieren Collection",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "button_style": "light",
+        "overlay_opacity": 25,
+        "height_desktop": 760,
+        "height_mobile": 520
+      }
     },
     "main": {
       "type": "hello-world",
