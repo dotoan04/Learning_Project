@@ -44,7 +44,34 @@
     }
   },
   "collections": {
-    "title": "Collections"
+    "title": "Collections",
+    "empty": "No products found in this collection.",
+    "toolbar": {
+      "filter_and_sort": "Filter and sort",
+      "sort_by": "Sort by"
+    },
+    "filters": {
+      "min_price": "Min price",
+      "max_price": "Max price",
+      "clear_all": "Clear all",
+      "apply": "Apply"
+    }
+  },
+  "general": {
+    "breadcrumbs": {
+      "label": "Breadcrumb",
+      "home": "Home"
+    }
+  },
+  "accessibility": {
+    "close": "Close",
+    "slide": "Go to slide {{ number }}"
+  },
+  "products": {
+    "sale": "Sale",
+    "sold_out": "Sold out",
+    "add_to_bag": "Add to bag",
+    "rating_label": "{{ rating }} out of 5 stars"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
