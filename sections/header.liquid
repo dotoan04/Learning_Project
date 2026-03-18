@@ -1,4 +1,4 @@
-<header class="site-header full-width">
+<header class="site-header">
   {% if section.settings.announcement_text != blank %}
     <p class="site-header__announcement">{{ section.settings.announcement_text }}</p>
   {% endif %}
@@ -56,7 +56,15 @@
     position: sticky;
     top: 0;
     z-index: 30;
-    background: var(--color-background);
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transition: backdrop-filter 280ms ease, background 280ms ease, border-color 280ms ease;
+  }
+
+  .site-header.is-scrolled {
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
+    backdrop-filter: blur(5px);
     border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
   }
 
@@ -66,8 +74,13 @@
     font-size: 0.85rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    border-bottom: 1px solid transparent;
     color: color-mix(in srgb, var(--color-foreground) 88%, transparent);
+    transition: border-color 280ms ease;
+  }
+
+  .site-header.is-scrolled .site-header__announcement {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 8%, transparent);
   }
 
   .site-header__main {
@@ -220,6 +233,21 @@
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  const siteHeader = document.querySelector('.site-header');
+
+  function toggleHeaderScroll() {
+    if (window.scrollY > 8) {
+      siteHeader?.classList.add('is-scrolled');
+    } else {
+      siteHeader?.classList.remove('is-scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', toggleHeaderScroll, { passive: true });
+  toggleHeaderScroll();
+{% endjavascript %}
 
 {% schema %}
 {

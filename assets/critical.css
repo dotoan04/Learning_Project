@@ -116,3 +116,9 @@ body {
 .shopify-section > .full-width {
   grid-column: 1 / -1;
 }
+
+/* Fix sticky positioning for header section */
+.shopify-section:has(.site-header) {
+  position: static;
+  display: contents;
+}
