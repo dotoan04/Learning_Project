@@ -13,10 +13,17 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "announcement_text": "Vietnamese Figure Collection & Customize 2026",
+        "menu": "main-menu",
+        "logo_width": 210,
+        "show_search": true,
+        "show_account": false,
+        "customer_account_menu": "customer-account-main-menu"
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }
