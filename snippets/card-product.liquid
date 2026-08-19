@@ -93,12 +93,7 @@
 
   {% if show_button and product.available %}
     <div class="card-product__action">
-      {% render 'button',
-        label: 'products.add_to_bag' | t,
-        url: product.url,
-        style: 'dark',
-        class: 'card-product__button'
-      %}
+      {% render 'button', label: 'products.add_to_bag', url: product.url, style: 'dark', class: 'card-product__button' %}
     </div>
   {% endif %}
 </div>
@@ -266,3 +261,20 @@
     }
   }
 {% endstylesheet %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'button',
+            label: 'products.add_to_bag' | t,
+            url: product.url,
+            style: 'dark',
+            class: 'card-product__button'
+          %}
+  to: "{% render 'button', label: 'products.add_to_bag', url: product.url, style:
+    'dark', class: 'card-product__button' %}"
+  position: 3474..3589
+{% endcomment %}
